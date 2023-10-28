@@ -39,26 +39,5 @@ export class DatabaseService implements OnApplicationBootstrap {
 
   async onApplicationBootstrap(): Promise<void> {
     await this.connect();
-    await this.createTablesIfNotExist();
-  }
-
-  private async createTablesIfNotExist(): Promise<void> {
-    const query = `
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
-      );
-
-      CREATE TABLE IF NOT EXISTS todos (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        description TEXT,
-        completed BOOLEAN NOT NULL DEFAULT false,
-        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
-      )
-    `;
-    await this.query(query);
   }
 }
