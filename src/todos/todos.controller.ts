@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { TodoDto } from './dto/todo.dto';
+import { CreateTodoDto, UpdateTodoDto, TodoDto } from './dto/todo.dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -27,9 +27,7 @@ export class TodosController {
 
   @ApiCreatedResponse({ type: TodoDto })
   @Post()
-  async createTodo(
-    @Body() data: Pick<TodoDto, 'title' | 'completed' | 'user_id'>,
-  ) {
+  async createTodo(@Body() data: CreateTodoDto) {
     return await this.todosService.createTodo(
       data.title,
       data.completed,
@@ -40,10 +38,7 @@ export class TodosController {
 
   @ApiOkResponse({ type: TodoDto })
   @Patch(':id')
-  async updateTodo(
-    @Param('id') id: string,
-    @Body() data: Pick<TodoDto, 'title' | 'completed'>,
-  ) {
+  async updateTodo(@Param('id') id: string, @Body() data: UpdateTodoDto) {
     return await this.todosService.updateTodo(id, data.title, data.completed);
   }
 
