@@ -8,7 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { CreateTodoDto, UpdateTodoDto, TodoDto } from './dto/todo.dto';
+import {
+  CreateTodoDto,
+  UpdateTodoDto,
+  TodoDto,
+  FindOneParams,
+  FindByUserIdParams,
+} from './dto/todo.dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -19,9 +25,8 @@ import {
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
-
   @Get(':userId')
-  async getTodos(@Param('userId') userId: string) {
+  async getTodos(@Param() { userId }: FindByUserIdParams) {
     return await this.todosService.getTodos(userId);
   }
 
@@ -38,12 +43,15 @@ export class TodosController {
 
   @ApiOkResponse({ type: TodoDto })
   @Patch(':id')
-  async updateTodo(@Param('id') id: string, @Body() data: UpdateTodoDto) {
+  async updateTodo(
+    @Param('id') { id }: FindOneParams,
+    @Body() data: UpdateTodoDto,
+  ) {
     return await this.todosService.updateTodo(id, data.title, data.completed);
   }
 
   @Delete(':id')
-  async deleteTodo(@Param('id') id: string) {
+  async deleteTodo(@Param('id') { id }: FindOneParams) {
     return await this.todosService.deleteTodo(id);
   }
 }

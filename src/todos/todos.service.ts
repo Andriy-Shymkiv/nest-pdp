@@ -23,17 +23,17 @@ export class TodosService implements OnApplicationBootstrap {
     await this.databaseService.query(query);
   }
 
-  async getTodos(id: string): Promise<TodoDto[]> {
+  async getTodos(userId: string): Promise<TodoDto[]> {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
     `;
-    return await this.databaseService.query(query, [id]);
+    return await this.databaseService.query(query, [userId]);
   }
 
   async createTodo(
     title: string,
     completed: boolean,
-    user_id: number,
+    userId: string,
   ): Promise<TodoDto> {
     const query = `
       INSERT INTO todos (title, completed, user_id)
@@ -43,7 +43,7 @@ export class TodosService implements OnApplicationBootstrap {
     const result: TodoDto[] = await this.databaseService.query(query, [
       title,
       completed,
-      user_id,
+      userId,
     ]);
     return result[0];
   }

@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsNumberString, IsString } from 'class-validator';
 
 export class TodoDto {
   @ApiProperty()
@@ -16,7 +16,7 @@ export class TodoDto {
 
   @ApiProperty()
   @IsNumber()
-  user_id: number;
+  user_id: string;
 
   @ApiProperty()
   @IsString()
@@ -30,3 +30,13 @@ export class UpdateTodoDto extends OmitType(TodoDto, [
   'user_id',
   'created_at',
 ]) {}
+
+export class FindOneParams {
+  @IsNumberString()
+  id: string;
+}
+
+export class FindByUserIdParams {
+  @IsNumberString()
+  userId: string;
+}
