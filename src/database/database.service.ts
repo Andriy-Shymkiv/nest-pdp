@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { Pool } from 'pg';
 
 @Injectable()
@@ -33,7 +38,7 @@ export class DatabaseService implements OnApplicationBootstrap {
       const result = await this.pool.query(query, params);
       return result.rows;
     } catch (error) {
-      console.error('Error executing query:', error);
+      throw new BadRequestException(error.message);
     }
   }
 
