@@ -44,14 +44,14 @@ export class TodosController {
   @ApiOkResponse({ type: TodoDto })
   @Patch(':id')
   async updateTodo(
-    @Param('id') { id }: FindOneParams,
+    @Param() { id }: FindOneParams,
     @Body() data: UpdateTodoDto,
   ) {
     return await this.todosService.updateTodo(id, data.title, data.completed);
   }
 
   @Delete(':id')
-  async deleteTodo(@Param('id') { id }: FindOneParams) {
+  async deleteTodo(@Param() { id }: FindOneParams) {
     return await this.todosService.deleteTodo(id);
   }
 }
