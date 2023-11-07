@@ -72,5 +72,6 @@ export class TodosService implements OnApplicationBootstrap {
       DELETE FROM todos WHERE id = $1;
     `;
     await this.databaseService.query(query, [id]);
+    // return updated todos ???
   }
 }
