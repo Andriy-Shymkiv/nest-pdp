@@ -5,6 +5,7 @@ import {
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { Pool } from 'pg';
+import query from 'src/common/query';
 
 @Injectable()
 export class DatabaseService implements OnApplicationBootstrap {
@@ -42,7 +43,13 @@ export class DatabaseService implements OnApplicationBootstrap {
     }
   }
 
+  async createTables(): Promise<void> {
+    await this.query(query.users.createTableIfNotExist);
+    await this.query(query.todos.createTableIfNotExist);
+  }
+
   async onApplicationBootstrap(): Promise<void> {
+    await this.createTables();
     await this.connect();
   }
 }
