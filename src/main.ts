@@ -8,6 +8,7 @@ async function bootstrap() {
   });
 
   const PORT = process.env.PORT ?? 8080;
+  app.enableShutdownHooks();
   await app.listen(PORT);
   console.log(`Server started on port ${PORT}`);
 }

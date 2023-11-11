@@ -1,8 +1,15 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { Pool } from 'pg';
 
 @Injectable()
-export class DatabaseService implements OnApplicationBootstrap {
+export class DatabaseService
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
   private pool: Pool;
   private readonly logger = new Logger(DatabaseService.name);
 
@@ -39,5 +46,9 @@ export class DatabaseService implements OnApplicationBootstrap {
 
   async onApplicationBootstrap(): Promise<void> {
     await this.connect();
+  }
+
+  async onApplicationShutdown(): Promise<void> {
+    await this.disconnect();
   }
 }
