@@ -9,6 +9,12 @@ const query = {
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
       );
     `,
+    findMany: `
+      SELECT * FROM users;
+    `,
+    findOneByName: `
+      SELECT * FROM users WHERE username = $1;
+    `,
   },
   todos: {
     createTableIfNotExist: `
