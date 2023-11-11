@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { env } from './config/env.validation';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -7,8 +8,8 @@ async function bootstrap() {
     logger: ['error', 'warn', 'debug', 'log', 'verbose'],
   });
 
-  const PORT = process.env.PORT ?? 8080;
   app.enableShutdownHooks();
+  const PORT = env().PORT;
   await app.listen(PORT);
   console.log(`Server started on port ${PORT}`);
 }
