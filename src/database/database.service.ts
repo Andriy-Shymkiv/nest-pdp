@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   OnApplicationBootstrap,
   OnApplicationShutdown,
@@ -34,7 +35,12 @@ export class DatabaseService
   }
 
   async disconnect(): Promise<void> {
-    await this.pool.end();
+    try {
+      await this.pool.end();
+      this.logger.log('Disconnected from database');
+    } catch (error) {
+      this.logger.error('Error disconnecting from database:', error);
+    }
   }
 
   async query<T = any>(query: string, params?: any[]): Promise<T[]> {
@@ -42,7 +48,22 @@ export class DatabaseService
       const result = await this.pool.query(query, params);
       return result.rows;
     } catch (error: unknown) {
-      throw new BadRequestException((error as Error).message);
+      if (error instanceof Error) {
+        // generic error
+        throw new InternalServerErrorException(error.message);
+      } else if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error
+      ) {
+        // postgresql error
+        throw new BadRequestException(
+          `Error code: ${(error as { code: string }).code}`,
+        );
+      } else {
+        // unexpected error
+        throw new InternalServerErrorException();
+      }
     }
   }
 
