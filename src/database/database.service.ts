@@ -36,7 +36,10 @@ export class DatabaseService
     await this.pool.end();
   }
 
-  async query(query: string, params?: any[]): Promise<any> {
+  async query<T = any>(
+    query: string,
+    params?: any[],
+  ): Promise<T[] | Error | undefined> {
     try {
       const result = await this.pool.query(query, params);
       return result.rows;
