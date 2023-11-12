@@ -29,5 +29,5 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
   }
 }
 
-// can't immediately call validate(process.env) because process.env is not yet defined
+// can't immediately call validate(process.env) because the environment variables might not be set yet
 export const env = (): ValidatedEnv => validate(process.env);
