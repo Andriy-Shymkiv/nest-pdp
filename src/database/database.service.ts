@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   Logger,
   OnApplicationBootstrap,
@@ -36,15 +37,12 @@ export class DatabaseService
     await this.pool.end();
   }
 
-  async query<T = any>(
-    query: string,
-    params?: any[],
-  ): Promise<T[] | Error | undefined> {
+  async query<T = any>(query: string, params?: any[]): Promise<T[]> {
     try {
       const result = await this.pool.query(query, params);
       return result.rows;
-    } catch (error) {
-      console.error('Error executing query:', error);
+    } catch (error: unknown) {
+      throw new BadRequestException((error as Error).message);
     }
   }
 
