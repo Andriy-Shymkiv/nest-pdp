@@ -6,6 +6,6 @@ import { TodosEntityService } from './todos-entity.service';
 
 @Module({
   controllers: [TodosController],
-  providers: [TodosService, DatabaseService, TodosEntityService],
+  providers: [TodosService, TodosEntityService, DatabaseService],
 })
 export class TodosModule {}
