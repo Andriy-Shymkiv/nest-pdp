@@ -3,7 +3,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { TodoDto } from './dto/todo.dto';
 
 @Injectable()
-export class TodosEntityService {
+export class TodoEntityService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async getAll(userId: string): Promise<TodoDto[]> {
