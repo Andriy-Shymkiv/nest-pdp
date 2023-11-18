@@ -21,7 +21,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 
-@ApiBadRequestResponse({ description: 'Bad request' })
+@ApiBadRequestResponse()
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
