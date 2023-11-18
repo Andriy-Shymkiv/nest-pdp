@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TodoDto } from './dto/todo.dto';
-import { TodoEntityService } from './todo-entity.service';
+import { TodosEntityService } from './todos-entity.service';
 
 @Injectable()
 export class TodosService {
-  constructor(private readonly todoEntityService: TodoEntityService) {}
+  constructor(private readonly todoEntityService: TodosEntityService) {}
 
   async getAll(userId: string): Promise<TodoDto[]> {
     return await this.todoEntityService.getAll(userId);

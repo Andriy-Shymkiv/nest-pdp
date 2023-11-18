@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TodosController } from './todos.controller';
 import { TodosService } from './todos.service';
 import { DatabaseService } from 'src/database/database.service';
-import { TodoEntityService } from './todo-entity.service';
+import { TodosEntityService } from './todos-entity.service';
 
 @Module({
   controllers: [TodosController],
-  providers: [TodosService, DatabaseService, TodoEntityService],
+  providers: [TodosService, DatabaseService, TodosEntityService],
 })
 export class TodosModule {}

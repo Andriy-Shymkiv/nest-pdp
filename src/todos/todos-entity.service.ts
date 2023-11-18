@@ -3,7 +3,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { TodoDto } from './dto/todo.dto';
 
 @Injectable()
-export class TodoEntityService implements OnApplicationBootstrap {
+export class TodosEntityService implements OnApplicationBootstrap {
   constructor(private readonly databaseService: DatabaseService) {}
   private readonly tableName = 'todos';
 
