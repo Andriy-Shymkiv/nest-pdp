@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto/sign-in.dto';
 import { AuthGuard } from './auth.guard';
-import { UserDto } from 'src/users/dto/user.dto';
+import { CreateUserDto, UserDto } from 'src/users/dto/user.dto';
+import { UserResponseDto } from 'src/users/dto/user-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -19,13 +19,22 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  signIn(@Body() body: CreateUserDto): Promise<{ access_token: string }> {
+    return this.authService.signIn(body);
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post('register')
+  async signUp(@Body() body: CreateUserDto): Promise<UserResponseDto> {
+    return new UserResponseDto(await this.authService.signUp(body));
   }
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req: Request & { user: UserDto }) {
-    return req.user;
+  getProfile(
+    @Request()
+    req: Request & { user: UserDto },
+  ): UserResponseDto {
+    return new UserResponseDto(req.user);
   }
 }

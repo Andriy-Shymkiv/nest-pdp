@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 
 export enum UserRole {
@@ -27,3 +27,9 @@ export class UserDto {
   @IsString()
   created_at: string;
 }
+
+export class CreateUserDto extends OmitType(UserDto, [
+  'id',
+  'created_at',
+  'role',
+]) {}
