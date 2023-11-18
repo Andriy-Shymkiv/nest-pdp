@@ -10,7 +10,7 @@ export class TodoEntityService {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
     `;
-    return await this.databaseService.query(query, [userId]);
+    return await this.databaseService.query<TodoDto>(query, [userId]);
   }
 
   async create(
@@ -23,7 +23,7 @@ export class TodoEntityService {
       VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result: TodoDto[] = await this.databaseService.query(query, [
+    const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
       completed,
       userId,
@@ -42,7 +42,7 @@ export class TodoEntityService {
       WHERE id = $3
       RETURNING *;
     `;
-    const result: TodoDto[] = await this.databaseService.query(query, [
+    const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
       completed,
       id,
@@ -54,7 +54,7 @@ export class TodoEntityService {
     const query = `
       DELETE FROM todos WHERE id = $1;
     `;
-    await this.databaseService.query(query, [id]);
+    await this.databaseService.query<TodoDto>(query, [id]);
     return true;
   }
 }
