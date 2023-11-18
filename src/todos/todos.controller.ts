@@ -27,7 +27,7 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
   @Get(':userId')
   async getTodos(@Param() { userId }: FindByUserIdParams) {
-    return await this.todosService.getTodos(userId);
+    return await this.todosService.getAll(userId);
   }
 
   @ApiCreatedResponse({ type: TodoDto })
