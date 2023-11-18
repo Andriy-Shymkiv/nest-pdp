@@ -14,7 +14,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async signIn({ username, password }: CreateUserDto): Promise<{
+  async login({ username, password }: CreateUserDto): Promise<{
     access_token: string;
   }> {
     const user = await this.usersService.findOne(username);
@@ -31,7 +31,7 @@ export class AuthService {
     };
   }
 
-  async signUp({ username, password }: CreateUserDto): Promise<UserDto> {
+  async register({ username, password }: CreateUserDto): Promise<UserDto> {
     const hash = bcrypt.hashSync(password, password.length);
     return await this.usersService.create({
       username,

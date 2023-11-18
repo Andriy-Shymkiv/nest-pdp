@@ -17,16 +17,16 @@ import { UserResponseDto } from 'src/users/dto/user-response.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() body: CreateUserDto): Promise<{ access_token: string }> {
-    return this.authService.signIn(body);
-  }
-
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  async signUp(@Body() body: CreateUserDto): Promise<UserResponseDto> {
-    return new UserResponseDto(await this.authService.signUp(body));
+  async registration(@Body() body: CreateUserDto): Promise<UserResponseDto> {
+    return new UserResponseDto(await this.authService.register(body));
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  login(@Body() body: CreateUserDto): Promise<{ access_token: string }> {
+    return this.authService.login(body);
   }
 
   @UseGuards(AuthGuard)
