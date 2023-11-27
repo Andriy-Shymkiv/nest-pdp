@@ -57,4 +57,17 @@ export class TodoEntityService {
     await this.databaseService.query<TodoDto>(query, [id]);
     return true;
   }
+
+  async createTable(): Promise<void> {
+    const query = `
+      CREATE TABLE IF NOT EXISTS todos (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        completed BOOLEAN NOT NULL DEFAULT false,
+        user_id INTEGER REFERENCES users(id),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      );
+    `;
+    await this.databaseService.query(query);
+  }
 }

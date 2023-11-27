@@ -65,35 +65,9 @@ export class DatabaseService
   }
 
   // should I create a separate service for creating tables?
-  async createUsersTable(): Promise<void> {
-    const query = `
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        role VARCHAR(255) NOT NULL DEFAULT 'user',
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      );
-    `;
-    await this.query(query);
-  }
-  async createTodosTable(): Promise<void> {
-    const query = `
-      CREATE TABLE IF NOT EXISTS todos (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        completed BOOLEAN NOT NULL DEFAULT false,
-        user_id INTEGER REFERENCES users(id),
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      );
-    `;
-    await this.query(query);
-  }
 
   async onApplicationBootstrap(): Promise<void> {
     await this.connect();
-    await this.createUsersTable();
-    await this.createTodosTable();
   }
 
   async onApplicationShutdown(): Promise<void> {
