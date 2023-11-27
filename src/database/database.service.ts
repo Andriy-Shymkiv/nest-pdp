@@ -64,8 +64,6 @@ export class DatabaseService
     }
   }
 
-  // should I create a separate service for creating tables?
-
   async onApplicationBootstrap(): Promise<void> {
     await this.connect();
   }
