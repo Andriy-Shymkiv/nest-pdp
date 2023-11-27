@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateTodoDto, TodoDto } from './dto/todo.dto';
 
 @Injectable()
-export class TodoEntityService {
+export class TodoEntityService implements OnApplicationBootstrap {
   constructor(private readonly databaseService: DatabaseService) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    await this.createTable();
+  }
 
   async getAll(userId: string): Promise<TodoDto[]> {
     const query = `
