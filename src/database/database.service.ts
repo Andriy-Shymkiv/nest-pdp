@@ -51,19 +51,16 @@ export class DatabaseService
       if (error instanceof Error) {
         // generic error
         throw new InternalServerErrorException(error.message);
-      } else if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error
-      ) {
+      }
+      if (typeof error === 'object' && error !== null && 'code' in error) {
         // postgresql error
         throw new BadRequestException(
           `Error code: ${(error as { code: string }).code}`,
         );
-      } else {
-        // unexpected error
-        throw new InternalServerErrorException();
       }
+
+      // unexpected error
+      throw new InternalServerErrorException();
     }
   }
 
