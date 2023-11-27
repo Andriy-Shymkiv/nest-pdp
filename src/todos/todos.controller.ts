@@ -33,12 +33,7 @@ export class TodosController {
   @ApiCreatedResponse({ type: TodoDto })
   @Post()
   async createTodo(@Body() data: CreateTodoDto): Promise<TodoDto> {
-    return await this.todosService.createTodo(
-      data.title,
-      data.completed,
-      // @todo: take user_id from request
-      data.user_id,
-    );
+    return await this.todosService.createTodo(data);
   }
 
   @ApiOkResponse({ type: TodoDto })

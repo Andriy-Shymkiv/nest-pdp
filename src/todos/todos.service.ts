@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TodoDto } from './dto/todo.dto';
+import { CreateTodoDto, TodoDto } from './dto/todo.dto';
 import { TodoEntityService } from './todo-entity.service';
 
 @Injectable()
@@ -10,12 +10,8 @@ export class TodosService {
     return await this.todoEntityService.getAll(userId);
   }
 
-  async createTodo(
-    title: string,
-    completed: boolean,
-    userId: string,
-  ): Promise<TodoDto> {
-    return await this.todoEntityService.create(title, completed, userId);
+  async createTodo(data: CreateTodoDto): Promise<TodoDto> {
+    return await this.todoEntityService.create(data);
   }
 
   async updateTodo(

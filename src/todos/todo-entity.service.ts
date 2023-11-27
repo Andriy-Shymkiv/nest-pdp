@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { TodoDto } from './dto/todo.dto';
+import { CreateTodoDto, TodoDto } from './dto/todo.dto';
 
 @Injectable()
 export class TodoEntityService {
@@ -10,14 +10,10 @@ export class TodoEntityService {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
     `;
-    return await this.databaseService.query<TodoDto>(query, [userId]);
+    return this.databaseService.query<TodoDto>(query, [userId]);
   }
 
-  async create(
-    title: string,
-    completed: boolean,
-    userId: string,
-  ): Promise<TodoDto> {
+  async create({ title, completed, user_id }: CreateTodoDto): Promise<TodoDto> {
     const query = `
       INSERT INTO todos (title, completed, user_id)
       VALUES ($1, $2, $3)
@@ -26,7 +22,7 @@ export class TodoEntityService {
     const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
       completed,
-      userId,
+      user_id,
     ]);
     return result[0];
   }
@@ -54,8 +50,12 @@ export class TodoEntityService {
     const query = `
       DELETE FROM todos WHERE id = $1;
     `;
-    await this.databaseService.query<TodoDto>(query, [id]);
-    return true;
+    try {
+      await this.databaseService.query<TodoDto>(query, [id]);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async createTable(): Promise<void> {
