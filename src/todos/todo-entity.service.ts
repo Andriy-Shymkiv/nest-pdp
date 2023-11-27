@@ -1,23 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { TodoDto } from './dto/todo.dto';
+import { CreateTodoDto, TodoDto } from './dto/todo.dto';
 
 @Injectable()
-export class TodoEntityService {
+export class TodoEntityService implements OnApplicationBootstrap {
   constructor(private readonly databaseService: DatabaseService) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    await this.createTable();
+  }
 
   async getAll(userId: string): Promise<TodoDto[]> {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
     `;
-    return await this.databaseService.query<TodoDto>(query, [userId]);
+    return this.databaseService.query<TodoDto>(query, [userId]);
   }
 
-  async create(
-    title: string,
-    completed: boolean,
-    userId: string,
-  ): Promise<TodoDto> {
+  async create({ title, completed, user_id }: CreateTodoDto): Promise<TodoDto> {
     const query = `
       INSERT INTO todos (title, completed, user_id)
       VALUES ($1, $2, $3)
@@ -26,7 +26,7 @@ export class TodoEntityService {
     const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
       completed,
-      userId,
+      user_id,
     ]);
     return result[0];
   }
@@ -54,7 +54,24 @@ export class TodoEntityService {
     const query = `
       DELETE FROM todos WHERE id = $1;
     `;
-    await this.databaseService.query<TodoDto>(query, [id]);
-    return true;
+    try {
+      await this.databaseService.query<TodoDto>(query, [id]);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async createTable(): Promise<void> {
+    const query = `
+      CREATE TABLE IF NOT EXISTS todos (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        completed BOOLEAN NOT NULL DEFAULT false,
+        user_id INTEGER REFERENCES users(id),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      );
+    `;
+    await this.databaseService.query(query);
   }
 }
