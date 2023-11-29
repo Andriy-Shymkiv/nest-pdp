@@ -10,11 +10,11 @@ export class TodosService {
     return this.todoEntityService.getAll(userId);
   }
 
-  async createTodo(data: CreateTodoDto): Promise<TodoDto> {
+  async create(data: CreateTodoDto): Promise<TodoDto> {
     return this.todoEntityService.create(data);
   }
 
-  async updateTodo(
+  async update(
     id: string,
     title: string,
     completed: boolean,
@@ -22,7 +22,7 @@ export class TodosService {
     return this.todoEntityService.update(id, title, completed);
   }
 
-  async deleteTodo(id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     return this.todoEntityService.delete(id);
   }
 }
