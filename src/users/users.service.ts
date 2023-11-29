@@ -7,7 +7,7 @@ export class UsersService {
   constructor(private readonly userEntityService: UserEntityService) {}
 
   async findOne(username: string): Promise<UserDto | undefined> {
-    return await this.userEntityService.findOne(username);
+    return this.userEntityService.findOne(username);
   }
 
   async create(data: CreateUserDto): Promise<UserDto> {
@@ -15,6 +15,6 @@ export class UsersService {
     if (user) {
       throw new ConflictException('user with this username already exists');
     }
-    return await this.userEntityService.create(data);
+    return this.userEntityService.create(data);
   }
 }

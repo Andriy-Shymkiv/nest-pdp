@@ -33,7 +33,7 @@ export class AuthService {
 
   async register({ username, password }: CreateUserDto): Promise<UserDto> {
     const hash = bcrypt.hashSync(password, password.length);
-    return await this.usersService.create({
+    return this.usersService.create({
       username,
       password: hash,
     });
