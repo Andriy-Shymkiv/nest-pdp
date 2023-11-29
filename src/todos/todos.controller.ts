@@ -27,13 +27,13 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
   @Get(':userId')
   async getTodos(@Param() { userId }: FindByUserIdParams): Promise<TodoDto[]> {
-    return await this.todosService.getAll(userId);
+    return this.todosService.getAll(userId);
   }
 
   @ApiCreatedResponse({ type: TodoDto })
   @Post()
   async createTodo(@Body() data: CreateTodoDto): Promise<TodoDto> {
-    return await this.todosService.createTodo(data);
+    return this.todosService.createTodo(data);
   }
 
   @ApiOkResponse({ type: TodoDto })
@@ -42,11 +42,11 @@ export class TodosController {
     @Param() { id }: FindOneParams,
     @Body() data: UpdateTodoDto,
   ): Promise<TodoDto> {
-    return await this.todosService.updateTodo(id, data.title, data.completed);
+    return this.todosService.updateTodo(id, data.title, data.completed);
   }
 
   @Delete(':id')
   async deleteTodo(@Param() { id }: FindOneParams): Promise<boolean> {
-    return await this.todosService.deleteTodo(id);
+    return this.todosService.deleteTodo(id);
   }
 }
