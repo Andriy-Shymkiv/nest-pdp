@@ -7,6 +7,8 @@ interface ValidatedEnv {
   DB_NAME: string;
   DB_PORT: number;
   JWT_SECRET: string;
+  REDIS_HOST: string;
+  REDIS_PORT: number;
 }
 
 export function validate(config: Record<string, unknown>): ValidatedEnv {
@@ -17,6 +19,8 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
     DB_NAME: z.string(),
     DB_PORT: z.number().default(5432),
     JWT_SECRET: z.string(),
+    REDIS_HOST: z.string(),
+    REDIS_PORT: z.number().default(6379),
   });
 
   try {
@@ -24,6 +28,7 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
       ...config,
       PORT: Number(config.PORT),
       DB_PORT: Number(config.DB_PORT),
+      REDIS_PORT: Number(config.REDIS_PORT),
     });
     return validatedConfig;
   } catch (error: unknown) {
