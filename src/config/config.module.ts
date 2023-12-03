@@ -1,7 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
-import { validate } from './env.validation';
+import { ValidatedEnv, validate } from './env.validation';
 
 export default ConfigModule.forRoot({
   validate,
   isGlobal: true,
 });
+
+export const ENV: ValidatedEnv = validate(process.env);
