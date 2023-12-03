@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-interface ValidatedEnv {
+export interface ValidatedEnv {
   PORT: number;
   DB_HOST: string;
   DB_USER: string;
@@ -28,6 +28,3 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
     throw new Error(error.message);
   }
 }
-
-// can't immediately call validate(process.env) because process.env is not yet defined
-export const env = (): ValidatedEnv => validate(process.env);

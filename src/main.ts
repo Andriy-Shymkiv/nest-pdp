@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { env } from './config/env.validation';
+import { ENV } from './config/config.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -9,7 +9,7 @@ async function bootstrap() {
   });
 
   app.enableShutdownHooks();
-  const PORT = env().PORT;
+  const PORT = ENV.PORT;
   await app.listen(PORT);
   console.log(`Server started on port ${PORT}`);
 }
