@@ -1,10 +1,10 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import redisStore from 'cache-manager-redis-store';
-import { env } from 'src/config/env.validation';
+import { ENV } from 'src/config/config.module';
 
 export default CacheModule.register({
   isGlobal: true,
   store: redisStore,
-  host: env().REDIS_HOST,
-  port: env().REDIS_PORT,
+  host: ENV.REDIS_HOST,
+  port: ENV.REDIS_PORT,
 });
