@@ -7,7 +7,7 @@ import {
   OnApplicationShutdown,
 } from '@nestjs/common';
 import { Pool } from 'pg';
-import { env } from 'src/config/env.validation';
+import { ENV } from 'src/config/config.module';
 
 @Injectable()
 export class DatabaseService
@@ -18,10 +18,10 @@ export class DatabaseService
 
   constructor() {
     this.pool = new Pool({
-      user: env().DB_USER,
-      host: env().DB_HOST,
-      database: env().DB_NAME,
-      port: env().DB_PORT,
+      user: ENV.DB_USER,
+      host: ENV.DB_HOST,
+      database: ENV.DB_NAME,
+      port: ENV.DB_PORT,
     });
   }
 
