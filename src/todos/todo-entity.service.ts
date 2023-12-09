@@ -1,6 +1,12 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { CreateTodoDto, TodoDto } from './dto/todo.dto';
+import { TodoDto } from './dto/todo.dto';
+import {
+  CreateTodoInput,
+  DeleteTodoInput,
+  UpdateTodoInput,
+} from './common/types';
+import { TODO_DEFAULT_COMPLETED } from './common/constants';
 
 @Injectable()
 export class TodoEntityService implements OnApplicationBootstrap {
@@ -10,14 +16,14 @@ export class TodoEntityService implements OnApplicationBootstrap {
     await this.createTable();
   }
 
-  async getAll(userId: string): Promise<TodoDto[]> {
+  async getAll(user_id: number): Promise<TodoDto[]> {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
     `;
-    return this.databaseService.query<TodoDto>(query, [userId]);
+    return this.databaseService.query<TodoDto>(query, [user_id]);
   }
 
-  async create({ title, completed, user_id }: CreateTodoDto): Promise<TodoDto> {
+  async create({ title, user_id }: CreateTodoInput): Promise<TodoDto> {
     const query = `
       INSERT INTO todos (title, completed, user_id)
       VALUES ($1, $2, $3)
@@ -25,37 +31,39 @@ export class TodoEntityService implements OnApplicationBootstrap {
     `;
     const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
-      completed,
+      TODO_DEFAULT_COMPLETED,
       user_id,
     ]);
     return result[0];
   }
 
-  async update(
-    id: string,
-    title: string,
-    completed: boolean,
-  ): Promise<TodoDto> {
+  async update({
+    title,
+    completed,
+    id,
+    user_id,
+  }: UpdateTodoInput): Promise<TodoDto> {
     const query = `
       UPDATE todos
       SET title = $1, completed = $2
-      WHERE id = $3
+      WHERE id = $3 AND user_id = $4
       RETURNING *;
     `;
     const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
       title,
       completed,
       id,
+      user_id,
     ]);
     return result[0];
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete({ id, user_id }: DeleteTodoInput): Promise<boolean> {
     const query = `
-      DELETE FROM todos WHERE id = $1;
+      DELETE FROM todos WHERE id = $1 AND user_id = $2;
     `;
     try {
-      await this.databaseService.query<TodoDto>(query, [id]);
+      await this.databaseService.query<TodoDto>(query, [id, user_id]);
       return true;
     } catch {
       return false;

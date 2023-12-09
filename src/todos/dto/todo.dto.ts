@@ -16,27 +16,27 @@ export class TodoDto {
 
   @ApiProperty()
   @IsNumber()
-  user_id: string;
+  user_id: number;
 
   @ApiProperty()
   @IsString()
   created_at: string;
 }
 
-export class CreateTodoDto extends OmitType(TodoDto, ['id', 'created_at']) {}
+export class CreateTodoDto extends OmitType(TodoDto, [
+  'id',
+  'created_at',
+  'completed',
+  'user_id',
+]) {}
 
 export class UpdateTodoDto extends OmitType(TodoDto, [
   'id',
-  'user_id',
   'created_at',
+  'user_id',
 ]) {}
 
 export class FindOneParams {
   @IsNumberString()
   id: string;
-}
-
-export class FindByUserIdParams {
-  @IsNumberString()
-  userId: string;
 }
