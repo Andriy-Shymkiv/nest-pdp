@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import ConfigModule from './config/config.module';
 import { DatabaseModule } from './database/database.module';
+import { TodosModule } from './todos/todos.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule],
+  imports: [ConfigModule, TodosModule, UsersModule, DatabaseModule],
   controllers: [],
-  providers: [],
+  providers: [Logger],
 })
 export class AppModule {}
