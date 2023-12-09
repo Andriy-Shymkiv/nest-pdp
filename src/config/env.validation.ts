@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { ZodError, z } from 'zod';
 
 export interface ValidatedEnv {
   PORT: number;
@@ -6,6 +6,7 @@ export interface ValidatedEnv {
   DB_USER: string;
   DB_NAME: string;
   DB_PORT: number;
+  JWT_SECRET: string;
 }
 
 export function validate(config: Record<string, unknown>): ValidatedEnv {
@@ -15,6 +16,7 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
     DB_USER: z.string(),
     DB_NAME: z.string(),
     DB_PORT: z.number().default(5432),
+    JWT_SECRET: z.string(),
   });
 
   try {
@@ -24,7 +26,7 @@ export function validate(config: Record<string, unknown>): ValidatedEnv {
       DB_PORT: Number(config.DB_PORT),
     });
     return validatedConfig;
-  } catch (error: any) {
-    throw new Error(error.message);
+  } catch (error: unknown) {
+    throw new Error((error as ZodError).message);
   }
 }

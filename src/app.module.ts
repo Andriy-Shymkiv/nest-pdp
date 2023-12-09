@@ -3,9 +3,10 @@ import ConfigModule from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule, TodosModule, UsersModule, DatabaseModule],
+  imports: [ConfigModule, TodosModule, UsersModule, AuthModule, DatabaseModule],
   controllers: [],
   providers: [Logger],
 })
