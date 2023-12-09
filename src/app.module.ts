@@ -8,6 +8,7 @@ import { DatabaseService } from './database/database.service';
 import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { SeedsModule } from './seeds/seeds.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     TodosModule,
     UsersModule,
     AuthModule,
+    SeedsModule,
   ],
   controllers: [],
   providers: [DatabaseService, Logger, throttlerProvider],
