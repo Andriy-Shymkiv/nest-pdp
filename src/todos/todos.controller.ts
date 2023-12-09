@@ -23,6 +23,9 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthRequest } from 'src/auth/common/types';
+import { RolesGuard } from 'src/common/roles.guard';
+import { Roles } from 'src/common/roles.decorator';
+import { UserRole } from 'src/users/dto/user.dto';
 
 @UseGuards(AuthGuard)
 @ApiBadRequestResponse()
@@ -61,6 +64,8 @@ export class TodosController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOkResponse({ type: Boolean })
   @Delete(':id')
   async delete(
