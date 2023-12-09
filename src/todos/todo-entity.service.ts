@@ -16,6 +16,17 @@ export class TodoEntityService implements OnApplicationBootstrap {
     await this.createTable();
   }
 
+  async getOne(id: number, user_id: number): Promise<TodoDto> {
+    const query = `
+      SELECT * FROM todos WHERE id = $1 AND user_id = $2;
+    `;
+    const result: TodoDto[] = await this.databaseService.query<TodoDto>(query, [
+      id,
+      user_id,
+    ]);
+    return result[0];
+  }
+
   async getAll(user_id: number): Promise<TodoDto[]> {
     const query = `
       SELECT * FROM todos WHERE user_id = $1;
