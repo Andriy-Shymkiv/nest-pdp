@@ -6,8 +6,9 @@ import {
   Param,
   Patch,
   Post,
-  Request,
   UseGuards,
+  UseInterceptors,
+  Request,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import {
@@ -21,6 +22,8 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthRequest } from 'src/auth/common/types';
 import { RolesGuard } from 'src/common/roles.guard';
@@ -29,11 +32,14 @@ import { UserRole } from 'src/users/dto/user.dto';
 
 @UseGuards(AuthGuard)
 @ApiBadRequestResponse()
+@UseInterceptors(CacheInterceptor)
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Get()
+  @CacheKey('todos')
+  @CacheTTL(60)
   async getAll(@Request() { user }: AuthRequest): Promise<TodoDto[]> {
     return this.todosService.getAll(user.id);
   }
