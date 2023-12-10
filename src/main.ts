@@ -6,6 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ENV } from './config/config.module';
+import { SeedsService } from './seeds/seeds.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -20,5 +21,8 @@ async function bootstrap() {
   const PORT = ENV.PORT;
   await app.listen(PORT);
   app.get(Logger).log(`Server running on port ${PORT}`);
+
+  const seedsService = app.get(SeedsService);
+  await seedsService.seedAll();
 }
 bootstrap();
