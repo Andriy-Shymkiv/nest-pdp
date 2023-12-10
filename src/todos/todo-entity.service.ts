@@ -1,11 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { TodoDto } from './dto/todo.dto';
-import {
-  CreateTodoInput,
-  DeleteTodoInput,
-  UpdateTodoInput,
-} from './common/types';
+import { CreateTodoDto, TodoDto, UpdateTodoDto } from './dto/todo.dto';
 import { TODO_DEFAULT_COMPLETED } from './common/constants';
 
 @Injectable()
@@ -34,7 +29,10 @@ export class TodoEntityService implements OnApplicationBootstrap {
     return this.databaseService.query<TodoDto>(query, [user_id]);
   }
 
-  async create({ title, user_id }: CreateTodoInput): Promise<TodoDto> {
+  async create({
+    title,
+    user_id,
+  }: CreateTodoDto & { user_id: number }): Promise<TodoDto> {
     const query = `
       INSERT INTO todos (title, completed, user_id)
       VALUES ($1, $2, $3)
@@ -53,7 +51,10 @@ export class TodoEntityService implements OnApplicationBootstrap {
     completed,
     id,
     user_id,
-  }: UpdateTodoInput): Promise<TodoDto> {
+  }: UpdateTodoDto & {
+    id: number;
+    user_id: number;
+  }): Promise<TodoDto> {
     const query = `
       UPDATE todos
       SET title = $1, completed = $2
@@ -69,7 +70,13 @@ export class TodoEntityService implements OnApplicationBootstrap {
     return result[0];
   }
 
-  async delete({ id, user_id }: DeleteTodoInput): Promise<boolean> {
+  async delete({
+    id,
+    user_id,
+  }: {
+    id: number;
+    user_id: number;
+  }): Promise<boolean> {
     const query = `
       DELETE FROM todos WHERE id = $1 AND user_id = $2;
     `;
