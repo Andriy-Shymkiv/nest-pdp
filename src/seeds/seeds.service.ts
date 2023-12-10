@@ -1,16 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { OmitType } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
-import { UserDto, UserRole } from 'src/users/dto/user.dto';
-import { TodoDto } from 'src/todos/dto/todo.dto';
+import { CreateUserDto } from 'src/users/dto/user.dto';
+import { CreateTodoDto } from 'src/todos/dto/todo.dto';
 import { TodosService } from 'src/todos/todos.service';
-
-class SeedUserDto extends OmitType(UserDto, ['id', 'created_at']) {}
-class SeedTodoDto extends OmitType(TodoDto, [
-  'id',
-  'created_at',
-  'completed',
-]) {}
 
 @Injectable()
 export class SeedsService {
@@ -19,12 +11,12 @@ export class SeedsService {
     private readonly todoService: TodosService,
   ) {}
 
-  private readonly users: SeedUserDto[] = [
-    { username: 'user', password: 'user', role: UserRole.USER },
-    { username: 'admin', password: 'admin', role: UserRole.ADMIN },
+  private readonly users: CreateUserDto[] = [
+    { username: 'user', password: 'user' },
+    { username: 'admin', password: 'admin' },
   ];
 
-  private readonly todos: SeedTodoDto[] = [
+  private readonly todos: (CreateTodoDto & { user_id: number })[] = [
     { title: 'Buy groceries', user_id: 1 },
     { title: 'Do laundry', user_id: 1 },
     { title: 'Clean room', user_id: 1 },
